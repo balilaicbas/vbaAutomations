@@ -1,0 +1,43 @@
+' this is specific for sellout info 
+' in general this macro helps to work with a table if you need to add simple data to standardize it. In my case I need to add Year, WeekOfTheYear and NationID
+
+Private Sub Form_Open(Cancel As Integer)
+Dim Year, Week As Integer
+Dim NationID As String
+Dim rs As Recordset
+Dim db As DAO.Database
+
+Anno = InputBox("insert year")
+Settimana = InputBox("insert week")
+cdNazione = InputBox("insert nation code")
+
+' in case you need to work on the first table you can use DoCmd.openquery, i need it because being very basic the first table is updated by copy pasting a part of an excel file that is not really cleaned
+DoCmd.OpenQuery "insert query name"
+
+
+Set db = CurrentDb
+Set rs = db.OpenRecordset("name table you want to update with constant datas", dbOpenTable)
+
+Do Until rs.EOF
+If rs!Year = 0 Then
+rs.Edit
+rs![Year] = Year
+rs.Update
+End If
+If rs!Week = 0 Then
+rs.Edit
+rs![Week] = Week
+rs.Update
+End If
+If rs!NationID = "" Then
+rs.Edit
+rs![NationID] = NationID
+rs.Update
+End If
+rs.MoveNext
+Loop
+
+DoCmd.Close acQuery, "name query you want to close", acSaveYes   ' in case you want to save it
+
+End Sub
+
