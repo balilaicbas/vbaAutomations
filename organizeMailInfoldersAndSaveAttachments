@@ -1,0 +1,66 @@
+Private Sub Application_NewMailEx(ByVal EntryIDCollection As String)
+
+'difference between newMail event:
+'NewMail is the event triggered when one (or more) new messages are received in the Inbox. The limitation is that the even doesn't include any information on the actual new message. And in an Exchange environment, you may get multiple new messages simultaneously but only get one NewMail event.
+'NewMailEx, on the other hand, includes a list of EntryIDs (in string form) for all the messages that have just arrived. You can then traverse that list and call GetItemFromID (that's a MAPISession method), if you need to perform some item-specific handling.
+'NewMailEx is only for Outlook2003 though. It's not available in the older versions of Outlook. If you need to support the old OL versions, you're out of luck.
+Dim a As String
+
+Dim email As Outlook.MailItem
+Set email = Application.Session.GetItemFromID(EntryIDCollection)
+
+Dim ONS As Outlook.NameSpace
+Set ONS = Outlook.GetNamespace("MAPI")
+
+Dim folder As Outlook.Folder
+Set folder = ONS.GetDefaultFolder(olFolderInbox)
+' olFolderInbox is the default inbox email folder
+
+ Dim olAttachment As Attachment
+ Set olAttachment = email.Attachments
+ 
+i = 1
+        If email.SenderEmailAddress = "INSERT SENDER" Then
+            email.Move folder.Folders("sellout").Folders("USA")
+            
+            If email.Attachments.Count > 0 Then
+            
+            If email.Subject Like "Belk*" Then
+            
+             For Each olAttachment In email.Attachments
+            
+                If Right(olAttachment.FileName, 4) = ".xls" Or Right(olAttachment.FileName, 5) = ".xslx" Or Right(olAttachment.FileName, 5) = ".xslm" Then
+                    
+                olAttachment.SaveAsFile "set path where you wanna save it" & olAttachment.FileName
+                              
+                End If
+            Next
+         ElseIf email.Subject Like "INSERT SUBJECT FILTER" Then
+         For Each olAttachment In email.Attachments
+            
+                If Right(olAttachment.FileName, 4) = ".xls" Or Right(olAttachment.FileName, 5) = ".xslx" Or Right(olAttachment.FileName, 5) = ".xslm" Then
+                    
+                olAttachment.SaveAsFile "set path where you wanna save it" & i & ".xlsx"
+                i = i + 1
+             Dim xlApp As Object
+            Set xlApp = CreateObject("Excel.Application")
+            xlApp.Application.Visible = True
+            xlApp.Workbooks.Open "set path where you wanna save it"
+                              
+                End If
+            Next
+            
+            
+            End If
+            Else
+            End If
+            Else
+            'HERE YOU CAN SET OTHERS FILTERS BASED ON SENDER
+            End If
+
+End Sub
+
+        
+
+
+End Sub
