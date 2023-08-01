@@ -1,3 +1,5 @@
+' this code is for Outlook, it organizes emails received based on the sender and save excel attachments in the chosen path
+
 Private Sub Application_NewMailEx(ByVal EntryIDCollection As String)
 
 'difference between newMail event:
@@ -21,7 +23,7 @@ Set folder = ONS.GetDefaultFolder(olFolderInbox)
  
 i = 1
         If email.SenderEmailAddress = "INSERT SENDER" Then
-            email.Move folder.Folders("sellout").Folders("USA")
+            email.Move folder.Folders("insertFolder").Folders("insertFolder")
             
             If email.Attachments.Count > 0 Then
             
