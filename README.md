@@ -1,2 +1,2 @@
 # vbaAutomations
-this codes can help you automatizing some tasks with excel vba
+this codes can help you automatizing some simple tasks with excel vba
